@@ -2,8 +2,8 @@ from rest_framework import generics , permissions
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Count
-from .models import Category , Product
-from .serializers import CategorySerializer, ProductDetailSerializer,ProductListSerializer
+from .models import Category , Product , Comment
+from .serializers import CategorySerializer, ProductDetailSerializer,ProductListSerializer ,CommentSerializer
 
 class CategoryListView(generics.ListAPIView):
     serializer_class = CategorySerializer
@@ -37,3 +37,13 @@ class ProductDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.AllowAny]
     def get_queryset(self):
         return Product.objects.filter(is_active=True).select_related("category").prefetch_related("comments")
+    
+
+
+class CommentCreateView(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def perform_create(self, serializer):
+        product_id = self.kwargs.get('product_pk')
+        serializer.save(user=self.request.user, product_id=product_id)
