@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Cart, CartItem
 from shop.models import Product
+
+
 class CartItemSerializer(serializers.ModelSerializer):
     total_price = serializers.ReadOnlyField()
     product_name = serializers.CharField(source='product.name', read_only=True)
