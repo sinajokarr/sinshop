@@ -1,15 +1,19 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet ,mixins ,ViewSet
 from rest_framework.mixins import CreateModelMixin ,RetrieveModelMixin , ListModelMixin
-from serializers import OrderSerializer ,CreateOrderSerializer
+from .serializers import OrderSerializer ,CreateOrderSerializer
 from .models import Order , OrderItem
 from cart.models import Cart
 from rest_framework.response import Response
 from django.db import transaction
 
+
 class OrderViewSet (mixins.CreateModelMixin,ListModelMixin,RetrieveModelMixin,GenericViewSet):
-    queryset = Order.objects.all()
     permission_classes = [IsAuthenticated]
+    def get_queryset (self ):
+        return Order.objects.filter(user=self.request.user)
+        
+        
     def get_serializer_class (self):
         if self.request.method == "POST" :
             return CreateOrderSerializer
