@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'cart',
     'orders',
     'payment',
+    'drf_spectacular',
+    
 ]
 
 MIDDLEWARE = [
@@ -130,9 +132,23 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+
+SPECTACULAR_SETTINGS = {
+'TITLE': 'SINSHOP API',
+'DESCRIPTION': 'Comprehensive and interactive documentation for Sina Online Store',
+'VERSION': '1.0.0',
+'SERVE_INCLUDE_SCHEMA': False, 
+}
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'account.User'
