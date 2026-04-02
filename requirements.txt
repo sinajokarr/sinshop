@@ -1,0 +1,13 @@
+Django>=4.2
+djangorestframework
+djangorestframework-simplejwt
+drf-spectacular
+requests
+celery
+redis
+psycopg2-binary
+django-cors-headers
+django-filter
+drf-nested-routers
+Pillow
+dj-database-url
