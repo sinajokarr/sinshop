@@ -6,7 +6,6 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 import requests
 import json
-
 from orders.models import Order
 from .models import Payment
 from .serializers import PaymentSerializer
@@ -72,6 +71,7 @@ class PaymentStartView(APIView):
             }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
+
 class PaymentVerifyView(APIView):
     
     def get(self, request):
@@ -80,10 +80,12 @@ class PaymentVerifyView(APIView):
 
         payment = get_object_or_404(Payment, ref_id=authority)
 
+
         if payment_status != 'OK':
             payment.status = Payment.STATUS_FAILED
             payment.save()
             return Response({"error": "Payment failed or canceled by user."}, status=status.HTTP_400_BAD_REQUEST)
+
 
         if payment.status == Payment.STATUS_SUCCESS:
             return Response({"message": "Payment already verified."}, status=status.HTTP_200_OK)
@@ -95,6 +97,7 @@ class PaymentVerifyView(APIView):
             "authority": authority
         }
 
+
         try:
             res = requests.post(
                 url=settings.ZARINPAL_VERIFY_URL, 
@@ -103,6 +106,7 @@ class PaymentVerifyView(APIView):
                 timeout=10
             )
             res_data = res.json()
+
 
             if len(res_data['errors']) == 0:
                 code = res_data['data']['code']
