@@ -11,7 +11,10 @@ services:
       - POSTGRES_DB=postgres
 
   redis:
-    image: redis:7-alpine
+    image: redis:alpine
+    container_name: sinshop_redis
+    ports:
+      - "6379:6379"
 
   web:
     build: .
