@@ -9,7 +9,7 @@ class CartItemSerializer(serializers.ModelSerializer):
     unit_price = serializers.DecimalField(source='product.final_price', max_digits=10, decimal_places=2, read_only=True)
     total_price = serializers.ReadOnlyField()
 
-    class Meta:
+    class Meta: 
         model = CartItem
         fields = ['id', 'product', 'product_name', 'unit_price', 'quantity', 'total_price']
 
